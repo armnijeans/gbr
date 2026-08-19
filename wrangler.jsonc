@@ -1,0 +1,17 @@
+{
+  /**
+   * Cloudflare Workers static-assets deploy — CLAUDE.md §6.
+   *
+   * No Worker script here on purpose: `output: 'export'` in next.config.ts
+   * produces a plain folder of HTML/CSS/JS in /out, and Cloudflare serves it
+   * directly from the edge with no server-side code in the request path.
+   * This is what "npx wrangler deploy" (set as the deploy command in the
+   * Cloudflare dashboard's Git integration) picks up.
+   */
+  "name": "gbr-website",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
