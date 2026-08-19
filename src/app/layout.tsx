@@ -4,10 +4,14 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { MobileActionBar } from "@/components/layout/MobileActionBar";
 import { WhatsAppWidget } from "@/components/layout/WhatsAppWidget";
-import { business, serviceArea } from "@/config/business";
+import { business, serviceArea, indexable } from "@/config/business";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  // metadataBase resolves the per-page `alternates.canonical` paths into
+  // absolute URLs. It points at business.siteUrl, which is still a placeholder
+  // domain — canonicals will be wrong until that is set to the real one.
+  metadataBase: new URL(business.siteUrl),
   // Title pattern from CLAUDE.md §10: {Page} in Birmingham | GBR Global Body Repairs
   title: {
     default: `Car Body Repairs in ${business.address.locality} | ${business.shortName} ${business.tradingName}`,
@@ -17,6 +21,16 @@ export const metadata: Metadata = {
     `Accident repair, paintwork, alloys and servicing under one roof in ${business.address.locality}, ` +
     `serving ${serviceArea.blurb}. Send three photos and we'll price it today.`,
   applicationName: `${business.shortName} ${business.tradingName}`,
+  // Belt and braces alongside robots.txt: while the content is placeholder,
+  // every page says noindex too. See the note on `indexable` in business.ts.
+  robots: indexable
+    ? { index: true, follow: true }
+    : { index: false, follow: false, nocache: true },
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    siteName: `${business.shortName} ${business.tradingName}`,
+  },
 };
 
 export const viewport: Viewport = {

@@ -20,6 +20,22 @@ const picks = {
   "proof-3-after":      ["1779048611509-e1bd641a8d7a", 760],
   "workshop":           ["1727893119356-1702fe921cf9", 1200],
   "alloys":             ["1611633235555-45e252fe48c8", 760],
+
+  // Gallery pairs. Matched by subject and tone so the drag-reveal reads as
+  // one car rather than two — front-end with front-end, door with door.
+  "gallery-4-before":   ["1597328290883-50c5787b7c7e", 760],
+  "gallery-4-after":    ["1616761879141-f485e5fed5df", 760],
+  "gallery-5-before":   ["1550565076-b2371ea1a324", 760],
+  "gallery-5-after":    ["1564705604144-51593412c133", 760],
+  "gallery-6-before":   ["1609511583488-e13c95c04aa0", 760],
+  "gallery-6-after":    ["1608479746923-7e17632a9799", 760],
+  "gallery-7-before":   ["1676035291793-645c307e5a4e", 760],
+  "gallery-7-after":    ["1703778672598-631c6fec67d2", 760],
+
+  // Workshop / about-page imagery.
+  "workshop-bay":       ["1632405862117-236585cfb757", 1200],
+  "spray-booth":        ["1666009419611-e550e8c378d5", 1200],
+  "workshop-lifts":     ["1618312980096-873bd19759a0", 1200],
 };
 
 const manifest = [];

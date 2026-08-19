@@ -16,3 +16,14 @@ proof-3-before       unsplash photo-1674632917668-6237bad1347d
 proof-3-after        unsplash photo-1779048611509-e1bd641a8d7a
 workshop             unsplash photo-1727893119356-1702fe921cf9
 alloys               unsplash photo-1611633235555-45e252fe48c8
+gallery-4-before     unsplash photo-1597328290883-50c5787b7c7e
+gallery-4-after      unsplash photo-1616761879141-f485e5fed5df
+gallery-5-before     unsplash photo-1550565076-b2371ea1a324
+gallery-5-after      unsplash photo-1564705604144-51593412c133
+gallery-6-before     unsplash photo-1609511583488-e13c95c04aa0
+gallery-6-after      unsplash photo-1608479746923-7e17632a9799
+gallery-7-before     unsplash photo-1676035291793-645c307e5a4e
+gallery-7-after      unsplash photo-1703778672598-631c6fec67d2
+workshop-bay         unsplash photo-1632405862117-236585cfb757
+spray-booth          unsplash photo-1666009419611-e550e8c378d5
+workshop-lifts       unsplash photo-1618312980096-873bd19759a0

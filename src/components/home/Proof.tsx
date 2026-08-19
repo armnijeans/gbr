@@ -26,8 +26,10 @@ export function Proof() {
         intro="Same car, same angle, same light — photographed as it arrived and again when it left."
       />
 
+      {/* Three on the homepage, per CLAUDE.md §8 — the rest live in the
+          gallery, which is what "See the full gallery" below goes to. */}
       <ul className="mt-10 grid gap-6 lg:grid-cols-3">
-        {proofItems.map((item, i) => (
+        {proofItems.slice(0, 3).map((item, i) => (
           <Reveal
             key={item.id}
             as="li"

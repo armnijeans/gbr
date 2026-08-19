@@ -94,6 +94,26 @@ export const business = {
 } as const;
 
 /**
+ * Search-engine indexing switch.
+ *
+ * DELIBERATELY FALSE. While the site carries placeholder phone numbers and
+ * unverified accreditation claims, having Google index it would be actively
+ * harmful: "Insurance approved" against an unreachable number is exactly the
+ * page you do not want ranking, and getting bad content de-indexed later is
+ * far more work than not publishing it now.
+ *
+ * robots.ts reads this and serves a blanket Disallow while it is false, and
+ * every page carries noindex to match.
+ *
+ * Flip to true when ALL of these are done:
+ *   1. `npm run todos` is clear, or every remaining ph() is confirmed correct
+ *   2. The trust claims are backed and you can name the basis (CLAUDE.md §2)
+ *   3. `siteUrl` above points at the real domain you own
+ *   4. The quote form is wired up (forms.accessKey) and tested
+ */
+export const indexable = false;
+
+/**
  * Where the work actually comes from.
  *
  * NOTE — the brief was written assuming a Birmingham address. Holloway Bank is
@@ -240,6 +260,67 @@ export const proofItems: readonly ProofItem[] = [
     after: "proof-3-after",
     beforeAlt: "Nearside door of a Ford Focus masked off with paper and tape ready for spraying",
     afterAlt: "The same Focus door after respray, showing an even gloss and a clean colour match",
+  }),
+  ph({
+    id: "proof-4",
+    vehicle: "Volkswagen Passat, 2017",
+    damage: "Front end, headlamp and bumper after a junction collision",
+    serviceSlug: "accident-repair" as const,
+    turnaround: "8 days",
+    before: "gallery-4-before",
+    after: "gallery-4-after",
+    beforeAlt:
+      "Front nearside of a silver Volkswagen Passat with the bumper torn away and the headlamp shattered",
+    afterAlt:
+      "The same Passat front end rebuilt with a new headlamp and bumper, panel gaps even and paint matched",
+  }),
+  ph({
+    id: "proof-5",
+    vehicle: "BMW 3 Series, 2021",
+    damage: "Nearside rear door, impact dent beside the handle",
+    serviceSlug: "smart-repair" as const,
+    turnaround: "1 day",
+    before: "gallery-5-before",
+    after: "gallery-5-after",
+    beforeAlt:
+      "Dent in the dark metallic paintwork of a BMW rear door, just below the door handle",
+    afterAlt:
+      "The same BMW door with the dent removed, reflections running unbroken across the panel",
+  }),
+  ph({
+    id: "proof-6",
+    vehicle: "Audi A4, 2019",
+    damage: "Offside alloys, kerb damage to both wheels",
+    serviceSlug: "smart-repair" as const,
+    turnaround: "2 days",
+    before: "gallery-6-before",
+    after: "gallery-6-after",
+    beforeAlt: "Kerbed and corroded alloy wheel on an Audi A4, rim edge scuffed through the finish",
+    afterAlt: "The same Audi alloy refurbished and refinished, rim edge clean and even",
+  }),
+  ph({
+    id: "proof-7",
+    vehicle: "Ford Fiesta ST, 2018",
+    damage: "Full respray after lacquer failure across the roof and bonnet",
+    serviceSlug: "paint-and-resprays" as const,
+    turnaround: "12 days",
+    before: "gallery-7-before",
+    after: "gallery-7-after",
+    beforeAlt:
+      "Ford Fiesta masked and sheeted in the spray booth, prepared for a full respray",
+    afterAlt: "The same Fiesta finished in fresh red paint, gloss even across every panel",
+  }),
+  ph({
+    id: "proof-8",
+    vehicle: "Mercedes C-Class, 2020",
+    damage: "Rear quarter panel, deep crease from a car park impact",
+    serviceSlug: "accident-repair" as const,
+    turnaround: "3 days",
+    before: "hero-before",
+    after: "hero-after",
+    beforeAlt: "Deep crease and paint damage along the rear quarter panel of a grey saloon",
+    afterAlt:
+      "The same rear quarter panel straightened, resprayed and polished to a mirror finish",
   }),
 ] as const;
 
