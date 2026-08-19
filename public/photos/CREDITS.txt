@@ -1,0 +1,18 @@
+Placeholder photography — Unsplash (unsplash.com/license)
+Free for commercial use, no attribution required. These are STAND-INS.
+Replace every one of them with GBR's own work before launch; see CLAUDE.md §13.
+
+hero-before          unsplash photo-1762049297259-f9fdd460ec99
+hero-after           unsplash photo-1572023101419-0c58422316ec
+service-accident     unsplash photo-1654027197679-84c14708d5de
+service-smart        unsplash photo-1779048611509-e1bd641a8d7a
+service-paint        unsplash photo-1674632917668-6237bad1347d
+service-servicing    unsplash photo-1727893119356-1702fe921cf9
+proof-1-before       unsplash photo-1662541547523-118842914aa7
+proof-1-after        unsplash photo-1777213001814-3fb7036696dd
+proof-2-before       unsplash photo-1786489785778-a163f38b7c87
+proof-2-after        unsplash photo-1708805282706-f44730b7e527
+proof-3-before       unsplash photo-1674632917668-6237bad1347d
+proof-3-after        unsplash photo-1779048611509-e1bd641a8d7a
+workshop             unsplash photo-1727893119356-1702fe921cf9
+alloys               unsplash photo-1611633235555-45e252fe48c8

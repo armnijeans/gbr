@@ -1,12 +1,15 @@
 {
-  "name": "gbr-tmp",
+  "name": "gbr-global-body-repairs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "todos": "node scripts/list-todos.mjs",
+    "typecheck": "tsc --noEmit",
+    "photos": "node scripts/fetch-placeholder-photos.mjs"
   },
   "dependencies": {
     "react": "19.1.0",

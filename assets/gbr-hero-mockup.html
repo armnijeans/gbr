@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GBR — Homepage hero direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E131A; --steel:#1B2432; --line:#2E3B4E;
+  --red:#E4262C; --paper:#F5F6F7; --primer:#8894A3;
+  --x:52%;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#05080C;font-family:'Barlow',system-ui,sans-serif;color:var(--paper);
+     display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.wrap{width:100%;max-width:1100px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+
+.nav{display:flex;align-items:center;gap:22px;padding:14px 22px;background:var(--ink);
+     border-bottom:1px solid var(--line)}
+.mark{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:23px;font-style:italic;letter-spacing:.5px}
+.mark i{color:var(--red);font-style:italic}
+.links{display:flex;gap:20px;margin-left:auto;font-size:12.5px;text-transform:uppercase;
+       letter-spacing:.11em;color:var(--primer);font-weight:600}
+.links span:first-child{color:var(--paper)}
+.navcta{font-family:'Barlow Condensed',sans-serif;font-size:17px;letter-spacing:.06em;
+        background:var(--red);color:#fff;padding:7px 15px;border-radius:3px;font-weight:600}
+
+.stage{position:relative;height:440px;background:var(--ink);cursor:ew-resize;
+       user-select:none;touch-action:none;overflow:hidden}
+.layer{position:absolute;inset:0}
+.after{background:
+  linear-gradient(107deg,transparent 0 36%,rgba(255,255,255,.16) 41%,rgba(255,255,255,.03) 47%,transparent 55%),
+  linear-gradient(160deg,#33405A 0%,#1D2839 40%,#121A26 100%)}
+.before{background:linear-gradient(160deg,#3A3E42 0%,#25282C 45%,#16181B 100%);
+  clip-path:polygon(0 0, calc(var(--x) + 34px) 0, calc(var(--x) - 34px) 100%, 0 100%)}
+.scr{position:absolute;background:rgba(214,220,228,.5);transform-origin:left center}
+.s1{left:9%;top:44%;width:190px;height:2px;transform:rotate(7deg)}
+.s2{left:12%;top:52%;width:120px;height:1px;transform:rotate(4deg);opacity:.6}
+.s3{left:16%;top:60%;width:150px;height:3px;transform:rotate(9deg);opacity:.75}
+.dent{position:absolute;left:20%;top:33%;width:130px;height:92px;border-radius:50%;
+  background:radial-gradient(ellipse at 34% 32%,rgba(0,0,0,.55),transparent 68%);filter:blur(4px)}
+
+.div{position:absolute;top:-12%;left:var(--x);height:124%;width:3px;background:var(--red);
+     transform:rotate(4.6deg);box-shadow:0 0 22px rgba(228,38,44,.6)}
+.grip{position:absolute;top:50%;left:var(--x);transform:translate(-50%,-50%);width:46px;height:46px;
+      border-radius:50%;background:var(--red);display:grid;place-items:center;color:#fff;
+      font-size:14px;letter-spacing:-2px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.55)}
+.tag{position:absolute;bottom:18px;font-family:'Barlow Condensed',sans-serif;font-size:13px;
+     letter-spacing:.22em;text-transform:uppercase;color:var(--primer)}
+.tag-l{left:26px}.tag-r{right:26px;color:#C9D3E0}
+
+.copy{position:absolute;inset:0;padding:44px 46px;display:flex;flex-direction:column;
+      justify-content:center;pointer-events:none;
+      background:linear-gradient(90deg,rgba(10,14,20,.84) 0 46%,transparent 78%)}
+.eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
+         letter-spacing:.26em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+h1{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:54px;line-height:.98;
+   margin-bottom:16px;max-width:15ch}
+h1 em{color:var(--red);font-style:normal}
+.sub{font-size:16.5px;line-height:1.5;color:#C2CBD6;max-width:40ch;margin-bottom:26px}
+.btns{display:flex;gap:12px;pointer-events:auto;flex-wrap:wrap}
+.b{font-family:'Barlow Condensed',sans-serif;font-size:19px;letter-spacing:.05em;padding:12px 22px;
+   border-radius:3px;font-weight:600;border:1px solid transparent;cursor:pointer}
+.b1{background:var(--red);color:#fff}
+.b2{border-color:#48566B;color:var(--paper);background:transparent}
+
+.strip{display:flex;background:var(--steel);border-top:1px solid var(--line)}
+.cell{flex:1;padding:15px 20px;border-right:1px solid var(--line);
+      font-family:'Barlow Condensed',sans-serif;letter-spacing:.13em;text-transform:uppercase;
+      font-size:13.5px;color:#AEBAC9;font-weight:600}
+.cell:last-child{border-right:none}
+.cell b{display:block;color:var(--paper);font-size:15px;letter-spacing:.08em}
+
+@media (max-width:640px){
+  h1{font-size:34px}.copy{padding:26px}.links{display:none}.stage{height:460px}
+  .strip{flex-wrap:wrap}.cell{flex:1 1 50%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <div class="mark">GB<i>R</i></div>
+    <div class="links"><span>Repairs</span><span>Insurance</span><span>Our work</span><span>Servicing</span></div>
+    <div class="navcta">GET A PRICE</div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="layer after"></div>
+    <div class="layer before">
+      <div class="dent"></div><div class="scr s1"></div><div class="scr s2"></div><div class="scr s3"></div>
+    </div>
+    <div class="div"></div>
+    <div class="grip">&#9664;&#9654;</div>
+    <div class="tag tag-l">Drag &rarr;</div>
+    <div class="tag tag-r">Finished &middot; 3 days</div>
+
+    <div class="copy">
+      <div class="eyebrow">Birmingham &middot; Insurance approved</div>
+      <h1>Like it <em>never</em> happened.</h1>
+      <p class="sub">Accident repair, paintwork, alloys and servicing under one roof.
+         Send us three photos and we&rsquo;ll price it today.</p>
+      <div class="btns">
+        <button class="b b1">SEND PHOTOS ON WHATSAPP</button>
+        <button class="b b2">CALL 0121 000 000</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="cell"><b>Insurance approved</b>We handle the claim</div>
+    <div class="cell"><b>Lifetime guarantee</b>On all paintwork</div>
+    <div class="cell"><b>Courtesy car</b>Subject to availability</div>
+    <div class="cell"><b>Free collection</b>Across the West Midlands</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, s=document.getElementById('stage'), down=false;
+  function set(e){
+    var r=s.getBoundingClientRect();
+    var p=((e.clientX-r.left)/r.width)*100;
+    root.style.setProperty('--x', Math.max(8,Math.min(92,p))+'%');
+  }
+  s.addEventListener('pointerdown',function(e){down=true;set(e);});
+  window.addEventListener('pointermove',function(e){if(down)set(e);});
+  window.addEventListener('pointerup',function(){down=false;});
+  s.addEventListener('pointermove',function(e){if(!down)set(e);});
+})();
+</script>
+</body>
+</html>

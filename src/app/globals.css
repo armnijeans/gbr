@@ -1,26 +1,224 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Brand tokens — CLAUDE.md §4. Nothing outside this palette.
+   Declared as custom properties here, mirrored into Tailwind via @theme below
+   (Tailwind v4 is CSS-first; @theme replaces tailwind.config.ts).
+--------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #0e131a;      /* page base, dark sections */
+  --steel: #1b2432;    /* raised surfaces, cards, footer */
+  --line: #2e3b4e;     /* hairlines, borders */
+  --red: #e4262c;      /* brand red — CTAs and one accent per view ONLY */
+  --paper: #f5f6f7;    /* light sections, primary text on dark */
+  --primer: #8894a3;   /* muted/secondary text ON DARK (6.1:1 on --ink) */
+
+  /* Accessibility-mandated darkening of --primer, per CLAUDE.md §11:
+     --primer on --paper is only 2.85:1 and fails. This is 5.4:1.
+     Use --primer on dark sections, --primer-deep on light ones. */
+  --primer-deep: #5a6675;
+
+  /* The signature diagonal — the angle of the leg of the "R" in the logo.
+     Used by the hero drag-reveal, section edges and card masks. */
+  --diagonal: 5deg;
+
+  /* Drag-reveal position. Overridden per-instance by the component. */
+  --reveal-x: 52%;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-steel: var(--steel);
+  --color-line: var(--line);
+  --color-red: var(--red);
+  --color-paper: var(--paper);
+  --color-primer: var(--primer);
+  --color-primer-deep: var(--primer-deep);
+
+  --font-display: var(--font-chakra-petch), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-barlow), ui-sans-serif, system-ui, sans-serif;
+  --font-utility: var(--font-barlow-condensed), ui-sans-serif, system-ui, sans-serif;
+
+  /* Below this, a full phone number will not sit beside a second action. */
+  --breakpoint-xs: 380px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  /* Sticky header offset for in-page anchors. */
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 16.5px;      /* CLAUDE.md §4 scale */
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* Room for the mobile sticky action bar. */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Display type — headings only, never body copy (CLAUDE.md §4). */
+.font-display {
+  font-family: var(--font-display);
+  line-height: 0.98;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------------
+   Focus — visible on every interactive element (CLAUDE.md §11)
+--------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+/* On red surfaces the red ring is invisible; switch to paper. */
+.on-red:focus-visible {
+  outline-color: var(--paper);
+}
+
+/* ---------------------------------------------------------------------------
+   Motion.
+
+   CLAUDE.md §5 originally scoped this to the hero load sequence, gallery
+   scroll-reveal and card hovers, "nothing else" — deliberately restrained.
+   Client asked for more presence sitewide (colour-driven hover states,
+   scroll-reveal beyond the gallery, an idle pulse on the WhatsApp widget); the
+   brief for this document has expanded, not been abandoned — everything
+   added still passes the same bar: colour and opacity/transform only, no
+   bounce or scale-pop, and every one of it collapses to nothing under
+   prefers-reduced-motion below.
+--------------------------------------------------------------------------- */
+@keyframes gbr-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.gbr-rise {
+  animation: gbr-rise 0.62s cubic-bezier(0.22, 0.68, 0.24, 1) both;
+}
+
+/* Scroll-reveal — see components/ui/Reveal.tsx. Default hidden state is
+   deliberately mild (12px, not the hero's 14px-plus-longer-throw) since these
+   fire repeatedly down the page rather than once at load; anything punchier
+   reads as busy by the third section. */
+.gbr-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 0.68, 0.24, 1),
+    transform 700ms cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.gbr-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* WhatsApp widget's idle pulse — a slow ring expanding out from the button.
+   Also gated by Tailwind's motion-safe: variant at the call site, so this
+   never runs at all rather than running once under reduced motion. */
+@keyframes gbr-widget-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  70%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hero drag-reveal — the one orchestrated page-load sequence (CLAUDE.md §5).
+   The divider sweeps in from the right to show it is draggable, then hands
+   over to the component's inline --reveal-x.
+
+   Registering --reveal-x with @property is what makes it animatable at all;
+   an unregistered custom property jumps rather than interpolates.
+--------------------------------------------------------------------------- */
+@property --reveal-x {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 52%;
+}
+
+@keyframes gbr-reveal-sweep {
+  from {
+    --reveal-x: 88%;
+  }
+  to {
+    --reveal-x: var(--reveal-rest, 52%);
+  }
+}
+
+.gbr-reveal-intro {
+  animation: gbr-reveal-sweep 1.05s cubic-bezier(0.4, 0, 0.2, 1) 0.25s both;
+}
+
+/* ---------------------------------------------------------------------------
+   The diagonal motif, away from the drag-reveal (CLAUDE.md §5).
+
+   A hard-stop linear-gradient mask gives a true 5° edge at any box size — a
+   clip-path percentage would shear with the aspect ratio and the angle would
+   drift from section to section. The motif has to be exact or it reads as an
+   accident.
+--------------------------------------------------------------------------- */
+.diag-mask-b {
+  -webkit-mask-image: linear-gradient(
+    calc(180deg + var(--diagonal)),
+    #000 0 84%,
+    transparent 84%
+  );
+  mask-image: linear-gradient(
+    calc(180deg + var(--diagonal)),
+    #000 0 84%,
+    transparent 84%
+  );
+}
+
+/* Hairline at the section's own angle, used between stacked cards. */
+.diag-rule {
+  background: linear-gradient(
+    calc(90deg + var(--diagonal)),
+    transparent,
+    var(--line) 12%,
+    var(--line) 88%,
+    transparent
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Logo assets are raster JPEGs on a solid black field (see /assets).
+   `screen` blending drops the black against our dark surfaces so the mark sits
+   flush. TODO — replace with the original SVG (CLAUDE.md §13) and delete this.
+--------------------------------------------------------------------------- */
+.logo-on-dark {
+  mix-blend-mode: screen;
 }
