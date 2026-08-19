@@ -33,7 +33,7 @@
  * Marks a value as realistic placeholder content rather than a verified fact.
  * Returns the value untouched — this is a tracking marker, nothing more.
  */
-const ph = <T>(value: T): T => value;
+export const ph = <T>(value: T): T => value;
 
 /* ---------------------------------------------------------------------------
    Identity, contact, location
