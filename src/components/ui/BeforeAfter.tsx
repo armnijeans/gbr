@@ -80,6 +80,12 @@ export function BeforeAfter({
   /** Half the horizontal run of the diagonal, in px. Derived from height. */
   const [offset, setOffset] = useState(0);
   const labelId = useId();
+  /**
+   * Touch only: where a not-yet-committed gesture started, so onPointerMove
+   * can tell a horizontal drag from a vertical scroll before touching state.
+   * null once the gesture has committed one way or the other.
+   */
+  const touchStart = useRef<{ x: number; y: number; pointerId: number } | null>(null);
 
   // Keep the clip-path edge and the divider's rotation in register: for a
   // container of height H tilted by θ, the edge shifts ±(H/2)·tan(θ).
@@ -123,10 +129,26 @@ export function BeforeAfter({
     return () => window.clearTimeout(t);
   }, [intro]);
 
+  // Touch has to share the gesture with the page's own vertical scroll,
+  // which mouse never does — dragging the stage shouldn't trap a scroll
+  // attempt. touch-action: pan-y (below) hands vertical motion to the
+  // browser natively; this threshold is the JS half of the same decision,
+  // so a touch that turns out to be a scroll never gets an initial snap to
+  // the touch-down position first.
+  const TOUCH_COMMIT_PX = 8;
+
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     // Let the overlaid CTAs be clicked without hijacking the press.
     if ((e.target as HTMLElement).closest("[data-no-drag]")) return;
     endIntro();
+
+    if (e.pointerType === "touch") {
+      // Wait for onPointerMove to confirm horizontal intent before touching
+      // any state — see TOUCH_COMMIT_PX above.
+      touchStart.current = { x: e.clientX, y: e.clientY, pointerId: e.pointerId };
+      return;
+    }
+
     setDragging(true);
     e.currentTarget.setPointerCapture(e.pointerId);
     setFromClientX(e.clientX);
@@ -137,6 +159,27 @@ export function BeforeAfter({
       setFromClientX(e.clientX);
       return;
     }
+
+    const pending = touchStart.current;
+    if (pending && pending.pointerId === e.pointerId) {
+      const dx = e.clientX - pending.x;
+      const dy = e.clientY - pending.y;
+      if (Math.abs(dx) > TOUCH_COMMIT_PX && Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal — commit to the drag, starting from the current point
+        // rather than the touch-down point so it doesn't jump.
+        touchStart.current = null;
+        setDragging(true);
+        e.currentTarget.setPointerCapture(e.pointerId);
+        setFromClientX(e.clientX);
+      } else if (Math.abs(dy) > TOUCH_COMMIT_PX && Math.abs(dy) > Math.abs(dx)) {
+        // Vertical — this is a scroll. Let go without ever having captured
+        // the pointer or moved the divider, so touch-action: pan-y's native
+        // scroll proceeds untouched.
+        touchStart.current = null;
+      }
+      return;
+    }
+
     if (followPointer && e.pointerType === "mouse" && introDone) {
       setFromClientX(e.clientX);
     }
@@ -144,6 +187,7 @@ export function BeforeAfter({
 
   const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
     setDragging(false);
+    touchStart.current = null;
     if (e.currentTarget.hasPointerCapture(e.pointerId)) {
       e.currentTarget.releasePointerCapture(e.pointerId);
     }
@@ -206,7 +250,7 @@ export function BeforeAfter({
       onPointerCancel={onPointerUp}
       onKeyDown={onKeyDown}
       style={style}
-      className={`relative touch-none select-none overflow-hidden bg-[var(--ink)] [-webkit-tap-highlight-color:transparent] ${
+      className={`relative touch-pan-y select-none overflow-hidden bg-[var(--ink)] [-webkit-tap-highlight-color:transparent] ${
         dragging ? "cursor-grabbing" : "cursor-ew-resize"
       } ${className}`}
     >
